@@ -18,6 +18,38 @@ class DashboardController extends GetxController {
   TextEditingController eventDateController = TextEditingController();
   TextEditingController locationController = TextEditingController();
 
+  // untuk logout
+  void logOut() async {
+    final response = await _getConnect.post(
+      BaseUrl.logout,
+      {},
+      headers: {'Authorization': "Bearer $token"}, 
+      contentType: "application/json",
+    );
+
+    // Kalau server bilang logout sukses
+    if (response.statusCode == 200) {
+      Get.snackbar(
+        'Success',
+        'Logout Success',
+        snackPosition: SnackPosition.BOTTOM, 
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+
+      GetStorage().erase();
+
+      Get.offAllNamed('/login'); 
+    } else {
+      Get.snackbar(
+        'Failed', 
+        'Logout Failed',
+        snackPosition: SnackPosition.BOTTOM, 
+        backgroundColor: Colors.red,
+        colorText: Colors.white, 
+      );
+    }
+  }
 
   // Fungsi buat hapus event, tinggal kasih ID-nya
   void deleteEvent({required int id}) async {
